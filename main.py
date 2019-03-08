@@ -3,7 +3,6 @@ import pickle
 import imageio
 import torch
 import torch.optim as optim
-from torchvision import datasets, transforms
 from torch.autograd import Variable
 from model import generator, discriminator, BCE_loss
 from show_utils import show_result, show_row_mnist, show_train_hist
