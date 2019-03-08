@@ -101,7 +101,7 @@ def show_row_mnist(train_loader, show=False, path='raw_MNIST.png'):
         for i, j in itertools.product(range(size_figure_grid), range(size_figure_grid)):
             ax[i, j].get_xaxis().set_visible(False)
             ax[i, j].get_yaxis().set_visible(False)
-        for i, x_data, _ in enumerate(train_loader):
+        for i, x_data, x_lable in enumerate(train_loader):
             if i < size_figure_grid ** 2:
                 raw_mnist.append(x_data)
         for k in range(size_figure_grid ** 2):
@@ -161,8 +161,6 @@ def train():
         datasets.MNIST('data', train=True, download=True, transform=transform),
         batch_size=batch_size, shuffle=True)
 
-
-
     # network
     G = generator(input_size=100, image_size=28*28)
     D = discriminator(input_size=28*28, lable_size=1)
@@ -177,12 +175,12 @@ def train():
     D_optimizer = optim.Adam(D.parameters(), lr=lr)
 
     # results save folder
-    if not os.path.isdir('MNIST_GAN_results'):
-        os.mkdir('MNIST_GAN_results')
-    if not os.path.isdir('MNIST_GAN_results/Random_results'):
-        os.mkdir('MNIST_GAN_results/Random_results')
-    if not os.path.isdir('MNIST_GAN_results/Fixed_results'):
-        os.mkdir('MNIST_GAN_results/Fixed_results')
+    if not os.path.isdir('GAN_results'):
+        os.mkdir('GAN_results')
+    if not os.path.isdir('GAN_results/Random_results'):
+        os.mkdir('GAN_results/Random_results')
+    if not os.path.isdir('GAN_results/Fixed_results'):
+        os.mkdir('GAN_results/Fixed_results')
 
     train_hist = {}
     train_hist['D_losses'] = []
@@ -240,8 +238,8 @@ def train():
 
         print(f'[{(epoch + 1)}/{train_epoch}]: loss_d: {torch.mean(torch.FloatTensor(D_losses)):.3f}, loss_g: \
         {torch.mean(torch.FloatTensor(G_losses)):.3f}')
-        p = 'MNIST_GAN_results/Random_results/MNIST_GAN_' + str(epoch + 1) + '.png'
-        fixed_p = 'MNIST_GAN_results/Fixed_results/MNIST_GAN_' + str(epoch + 1) + '.png'
+        p = 'GAN_results/Random_results/MNIST_GAN_' + str(epoch + 1) + '.png'
+        fixed_p = 'GAN_results/Fixed_results/MNIST_GAN_' + str(epoch + 1) + '.png'
         show_result((epoch+1), save=True, path=p, isFix=False, G=G)
         show_result((epoch+1), save=True, path=fixed_p, isFix=True, G=G)
         train_hist['D_losses'].append(torch.mean(torch.FloatTensor(D_losses)))
@@ -249,19 +247,19 @@ def train():
 
 
     print("Training finish!... save training results")
-    torch.save(G.state_dict(), "MNIST_GAN_results/generator_param.pkl")
-    torch.save(D.state_dict(), "MNIST_GAN_results/discriminator_param.pkl")
-    with open('MNIST_GAN_results/train_hist.pkl', 'wb') as f:
+    torch.save(G.state_dict(), "GAN_results/generator_param.pkl")
+    torch.save(D.state_dict(), "GAN_results/discriminator_param.pkl")
+    with open('GAN_results/train_hist.pkl', 'wb') as f:
         pickle.dump(train_hist, f)
 
-    show_train_hist(train_hist, save=True, path='MNIST_GAN_results/MNIST_GAN_train_hist.png')
-    show_row_mnist(train_loader, show=False, path='MNIST_GAN_results/raw_MNIST.png')
+    show_train_hist(train_hist, save=True, path='GAN_results/MNIST_GAN_train_hist.png')
+    show_row_mnist(train_loader, show=False, path='GAN_results/raw_MNIST.png')
 
     images = []
     for e in range(train_epoch):
-        img_name = 'MNIST_GAN_results/Fixed_results/MNIST_GAN_' + str(e + 1) + '.png'
+        img_name = 'GAN_results/Fixed_results/MNIST_GAN_' + str(e + 1) + '.png'
         images.append(imageio.imread(img_name))
-    imageio.mimsave('MNIST_GAN_results/generation_animation.gif', images, fps=5)
+    imageio.mimsave('GAN_results/generation_animation.gif', images, fps=5)
 
 
 if __name__ == '__main__':
