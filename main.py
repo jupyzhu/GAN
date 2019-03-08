@@ -123,13 +123,13 @@ def train():
     # draw animation
     images1 = []
     images2 = []
-    for e in range(100):
+    for e in range(train_epoch):
         img_name1 = 'GAN_results/Fixed_results/' + str(e + 1) + '.png'
         img_name2 = 'GAN_results/Random_results/' + str(e + 1) + '.png'
         images1.append(imageio.imread(img_name1))
         images2.append(imageio.imread(img_name2))
     imageio.mimsave('GAN_results/generation_animation_Fixed.gif', images1, fps=5)
-    imageio.mimsave('GAN_results/generation_animation_Random.gif', images1, fps=5)
+    imageio.mimsave('GAN_results/generation_animation_Random.gif', images2, fps=5)
 
     show_row_mnist(train_loader, show=False, path='GAN_results/MNIST.png')
 
