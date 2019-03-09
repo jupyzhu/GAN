@@ -40,7 +40,7 @@ def show_result(num_epoch,  G, fixed_z, show = False, save = False, path = 'resu
 
 
 # to make 25 mnist images show in a figure
-def show_row_mnist(train_loader, show=False, path='raw_MNIST.png'):
+def show_row_mnist(mnist_data, show=False, path='MNIST.png'):
     if not os.path.exists(path):
         raw_mnist = []
         size_figure_grid = 5
@@ -48,16 +48,18 @@ def show_row_mnist(train_loader, show=False, path='raw_MNIST.png'):
         for i, j in itertools.product(range(size_figure_grid), range(size_figure_grid)):
             ax[i, j].get_xaxis().set_visible(False)
             ax[i, j].get_yaxis().set_visible(False)
-        for i, x_data, x_lable in enumerate(train_loader):
-            if i < size_figure_grid ** 2:
+        count = 0
+        for x_data, _ in mnist_data:
+            if count < size_figure_grid ** 2:
                 raw_mnist.append(x_data)
+                count += 1
         for k in range(size_figure_grid ** 2):
             i = k // 5
             j = k % 5
             ax[i, j].cla()
-            ax[i, j].imshow(raw_mnist[k].numpy(), cmap='gray')
+            ax[i, j].imshow(raw_mnist[k]， cmap='gray')
 
-        label = 'row MNIST'
+        label = 'MNIST samples'
         fig.text(0.5, 0.04, label, ha='center')
         plt.savefig(path)
 
