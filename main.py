@@ -6,7 +6,7 @@ import torch.optim as optim
 from torch.autograd import Variable
 from model import generator, discriminator, BCE_loss
 from show_utils import show_result, show_row_mnist, show_train_hist
-from mnist_loader import mnist_loader
+from mnist_loader import mnist_loader， mnist_data
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -131,7 +131,7 @@ def train():
     imageio.mimsave('GAN_results/generation_animation_Fixed.gif', images1, fps=5)
     imageio.mimsave('GAN_results/generation_animation_Random.gif', images2, fps=5)
 
-    show_row_mnist(train_loader, show=False, path='GAN_results/MNIST.png')
+    show_row_mnist(mnist_data, show=False, path='GAN_results/MNIST.png')
 
 
 if __name__ == '__main__':
